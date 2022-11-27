@@ -4,6 +4,8 @@ const _ = require('lodash');
 const fs = require("fs-extra")
 const dayjs = require("dayjs");
 const path = require('path')
+const chalk = require('chalk')
+const {success, error} = require('./color-console')
 //格式化时间
 const formatterTime = (time) => dayjs.unix(time).format('YYYY-MM-DD HH:mm:ss')
 
@@ -16,20 +18,24 @@ class GeneratorCode {
     }
 
     async run() {
-        console.log("-> 开始获取Yapi数据");
+        success("开始获取Yapi数据。");
         await this.getYapiData()
-        console.log("->Yapi数据获取完成!");
+        success("Yapi数据获取完成。");
         this.generatorApiCode()
-        console.log("->接口请求代码创建完成!");
-        // this.generatorApiArgumentVerify()
-        // console.log("->接口参数校验中间件代码创建完成!");
+        success("接口请求代码创建完成。");
     }
 
     //获取yapi数据
     async getYapiData() {
         const yapi = new Yapi(this.option)
         //获取项目id
-        const [e, {_id}] = await yapi.getProjectBaseInfo()
+        const [e, res] = await yapi.getProjectBaseInfo()
+
+        if (res.errcode !== 0) {
+            error(`errcode:${res.errcode},errmsg:${res.errmsg}`)
+        }
+
+        const {_id} = res
         //获取所有分类
         const [e1, {data: menusData}] = await yapi.getMenus(_id)
 
@@ -53,6 +59,9 @@ class GeneratorCode {
 
         function formatterDetailData(data) {
             return _.map(data, ([e, res]) => {
+                if (e) {
+                    console.log("请求yapi接口失败", e);
+                }
                 return res.data
             })
         }
@@ -105,8 +114,11 @@ class GeneratorCode {
             }
         })
         //写入文件 outputFileSync
+
+        success(`${this.yapiData}`);
         _.map(typeTemplate, (item) => {
             const filePath = path.join(this.option.projectDir, `.yapi/apis/${item.fileName}.js`)
+            success(`${filePath}`);
             return fs.outputFileSync(filePath, item.template)
         })
 
@@ -170,7 +182,12 @@ export default apiName
             const body = item.req_body_other === 'json' ? 'data' : ''
             const isGET = item.method === 'GET'
 
-            const funcParams = `${path ? path : ''}${(path && query) ? ',' : ''}${query ? 'params' : ''}${(path && query && !isGET) ? ',' : ''}${isGET ? '' : 'data'}`
+
+            const pathStr = `${path ? path : ''}${(path && query) ? ',' : ''}`
+            const queryStr = `${query ? 'params' : ''}${(query && !isGET) ? ',' : ''}`
+            const dataStr = `${isGET ? '' : 'data'}`
+
+            const funcParams = `${pathStr}${queryStr}${dataStr}`
 
 
             const requestParams = `${query ? '            params' : ''}${(query && !isGET) ? ',\n' : ''}${isGET ? '' : '            data'}`
@@ -190,8 +207,9 @@ export default apiName
         function generatorJSDoc(item, option, menusItemName) {
             const params = handleParams(item)
             const query = handleQuery(item)
+            const data = handleData(item)
             const describe = handleDescribe(item, option, menusItemName)
-            const arr = [describe, ...params, ...query]
+            const arr = [describe, ...params, ...query, ...data]
             let result = arr.reduce((str, item, index) => {
                 str += `    ${item}${arr.length - 1 !== index ? '\n' : ''}`
                 return str
@@ -215,16 +233,38 @@ export default apiName
             }
 
             function handleQuery(item) {
+                const addRequired = (required, name) => `${required ? '[' : ''}params.${name}${required ? ']' : ''}`
                 return (item.req_query || []).map(x => {
-                    return `*@param  ${x.name}  query参数 ${x.required === '1' ? 'required' : ''}  ${x.desc}`
+                    return `*@param ${addRequired(x.required, x.name)}  ${x.desc}`
                 })
             }
 
             //路径参数
             function handleParams(item) {
+                const addRequired = (required, name) => `${required ? '[' : ''}${name}${required ? ']' : ''}`
                 return (item.req_params || []).map(x => {
-                    return `*@param  ${x.name}  路径参数   ${x.desc}`
+                    return `*@param  ${addRequired(x.required, x.name)}     ${x.desc}`
                 })
+            }
+
+            // data参数
+            function handleData(item) { //
+                const addRequired = (required, name) => `${required ? '[' : ''}data.${name}${required ? ']' : ''}`
+                if (!item?.req_body_other) {
+                    return []
+                }
+
+                const req_body_other = JSON.parse(item?.req_body_other)
+
+                const properties = req_body_other?.items?.properties
+
+                const result = _.reduce(properties, (result, value, key) => {
+                    //  const type = req_body_other?.item?.type
+
+                    const str = `*@param {${value.type}} ${addRequired(value.required, key)}  ${value.description}`
+                    return result.concat(str)
+                }, [])
+                return result
             }
         }
 
@@ -259,18 +299,6 @@ export default apiName
                 return path[path.length - 1]
             }
         }
-
-
-    }
-
-    //生成interface代码
-    generatorInterface() {
-
-    }
-
-    //生成参数校验代码
-    generatorApiArgumentVerify() {
-
     }
 }
 

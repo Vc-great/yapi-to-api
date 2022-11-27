@@ -1,7 +1,7 @@
 const request = require('./request.js')
 
 class Yapi {
-    constructor({token, yapiUrl}) {
+    constructor({projectToken: token, yapiUrl}) {
         this.token = token
         this.url = yapiUrl
     }

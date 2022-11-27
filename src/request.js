@@ -3,7 +3,7 @@ const axios = require('axios')
 class Http {
     constructor() {
         this.baseURL = '/'
-        this.timeout = 0
+        this.timeout = 15000
         this.token = ''
     }
 
