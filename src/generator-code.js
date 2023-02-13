@@ -114,8 +114,6 @@ class GeneratorCode {
             }
         })
         //写入文件 outputFileSync
-
-        success(`${this.yapiData}`);
         _.map(typeTemplate, (item) => {
             const filePath = path.join(this.option.projectDir, `.yapi/apis/${item.fileName}.js`)
             success(`${filePath}`);
