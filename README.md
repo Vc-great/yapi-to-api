@@ -2,7 +2,44 @@
 
 根据Yapi提供的接口文档，生成api。
 
-## 介绍
+## 文档
+```js
+yapi -h
+Commands:
+  init            初始化,生成配置文件
+  install         生成代码
+  i               生成代码（简写形式）
+```
+## 使用
+安装
+```js
+npm i yapi-to-api -g
+//验证 
+yapi -v
+```
+
+使用
+```js
+//进⼊项⽬根⽬录下
+cd project
+
+//⽣成配置⽂件
+yapi init
+
+//在.yapi/yapi.config.js中填写yapi配置
+module.exports = {
+    yapiUrl:'www.baidu.com', // yapi访问地址
+    projectToken:'dff7d02796ffac69eb7b01f'  //yapi中项⽬的token
+}
+
+//生成api
+yapi i  
+// or
+yapi install
+```
+在.yapi/apis查看生成的api
+
+
 
 ## 生成api
 
