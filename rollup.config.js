@@ -1,22 +1,41 @@
 import babel from '@rollup/plugin-babel';
-import typescript from '@rollup/plugin-typescript';
+//import typescript from '@rollup/plugin-typescript';
 import {terser} from 'rollup-plugin-terser'
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json'
+const { cleandir } = require("rollup-plugin-cleandir");
 
+const removeShebang = (options = {}) => ({
+    name: 'rollup-plugin-remove-shebang',
+    transform: (code, id) => {
+        const includes = options.include || ['node_modules'];
+        if (includes.some(include => id.includes(include))) {
+            return code.replace(/[\s\n]*#!.*[\s\n]*/, '');
+        }
+        return null;
+    }
+});
 export default {
-    input:'src/main.js',
+    input:'bin/main.js',
     output:{
-        file:'dist/bundle.cjs.js',//输出文件的路径和名称
-        format:'cjs',//五种输出格式：amd/es6/iife/umd/cjs
-        name:'bundleName'//当format为iife和umd时必须提供，将作为全局变量挂在window下
+        file:'dist/bundle.cjs.js',
+        format:'cjs',
+        banner: '#!/usr/bin/env node',
+        exports: 'default'
     },
     plugins:[
-               babel({exclude:"node_modules/**"}),
-        typescript(),
+        cleandir("./dist"),
+        removeShebang({ include: ['/bin/main.js'] }),
+               babel({
+                   exclude:"node_modules/**",
+                   babelHelpers: 'bundled'
+               }),
+   //     typescript(),
         terser(),
         resolve(),
         commonjs(),
+        json()
    ]
 }
 
