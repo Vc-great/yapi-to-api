@@ -1,6 +1,6 @@
 {
   "name": "yapi-to",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,34 +12,36 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vc-great/yapi-to-api.git"
+  },
+  "homepage": "https://github.com/Vc-great/yapi-to-api",
   "dependencies": {
-    "@rollup/plugin-babel": "^6.0.3",
-    "@rollup/plugin-json": "^6.0.0",
     "@vue/cli-shared-utils": "^5.0.8",
     "axios": "^0.27.2",
-    "bluebird": "^3.7.2",
     "chalk-console": "^1.1.0",
     "commander": "^9.4.0",
-    "consola": "^2.15.3",
     "dayjs": "^1.11.5",
     "fs-extra": "^10.1.0",
     "prettier-eslint": "^15.0.1",
-    "prompts": "^2.4.2",
-    "rollup-plugin-cleandir": "^2.0.0"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.1",
-    "@babel/preset-env": "^7.19.1",
-    "@rollup/plugin-commonjs": "^22.0.2",
-    "@rollup/plugin-node-resolve": "^14.1.0",
-    "@rollup/plugin-typescript": "^8.5.0",
-    "lodash": "^4.17.21",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-json": "^6.0.0",
+    "typescript": "^4.8.3",
     "rollup": "^2.79.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-serve": "^2.0.1",
     "rollup-plugin-terser": "^7.0.2",
     "tslib": "^2.4.0",
-    "typescript": "^4.8.3"
+    "rollup-plugin-cleandir": "^2.0.0",
+    "@babel/core": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^14.1.0",
+    "@rollup/plugin-typescript": "^8.5.0"
   }
 }
