@@ -1,6 +1,6 @@
 {
   "name": "yapi-to",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vc-great/yapi-to-api.git"
+  },
+  "homepage": "https://github.com/Vc-great/yapi-to-api",
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
     "axios": "^0.27.2",

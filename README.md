@@ -13,7 +13,7 @@ Commands:
 ## 使用
 安装
 ```js
-npm i yapi-to-api -g
+npm i yapi-to -g
 //验证 
 yapi -v
 ```
