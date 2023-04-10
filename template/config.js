@@ -1,9 +1,13 @@
 const temp = `
 module.exports = {
     yapiUrl:'',  // example: www.baidu.com
-    projectToken:''  //项目token
+    projects:[
+        {
+            title:'',  //项目名称 
+            token:''  //项目token
+        }
+    ]
 }
 `
 
 module.exports = temp
-
