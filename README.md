@@ -29,7 +29,12 @@ yapi init
 //在.yapi/yapi.config.js中填写yapi配置
 module.exports = {
     yapiUrl:'www.baidu.com', // yapi访问地址
-    projectToken:'dff7d02796ffac69eb7b01f'  //yapi中项⽬的token
+    projects: [
+        {
+            title: '', //项目名称
+            token: '' //项目token
+        }
+    ]
 }
 
 //生成api
