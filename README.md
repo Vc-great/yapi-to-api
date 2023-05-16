@@ -1,6 +1,6 @@
 # yapi-to-api
 
-根据Yapi提供的接口文档，生成api。
+根据Yapi提供的接口文档，生成请求api和interface。
 
 ## 文档
 ```js
@@ -29,7 +29,12 @@ yapi init
 //在.yapi/yapi.config.js中填写yapi配置
 module.exports = {
     yapiUrl:'www.baidu.com', // yapi访问地址
-    projectToken:'dff7d02796ffac69eb7b01f'  //yapi中项⽬的token
+    projects: [
+        {
+            title: '', //项目名称
+            token: '' //项目token
+        }
+    ]
 }
 
 //生成api
@@ -39,7 +44,18 @@ yapi install
 ```
 在.yapi/apis查看生成的api
 
+##生成interface
+```js
+export interface list_query {
+//页码 (0..N)，默认为0
+page:string
+//每页显示的数目,默认为10
+size:string
+//以下列格式排序标准：property[,asc | desc]。 默认排序顺序为升序。 支持多种排序条件：如：id,asc
+sort?:string
 
+}
+```
 
 ## 生成api
 
