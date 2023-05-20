@@ -5,7 +5,7 @@ module.exports = {
     jsonSchema:true,  //是否生成jsonSchema
     projects:[
         {
-            title:'',  //项目名称 
+            title:'',  //项目名称,用于生成目录 
             token:''  //项目token
         }
     ]
